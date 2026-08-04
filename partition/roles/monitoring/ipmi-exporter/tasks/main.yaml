@@ -7,6 +7,15 @@
       - monitoring_ipmi_bmc_superuser is defined
       - monitoring_ipmi_bmc_superuser_pwd is defined
 
+- name: Check that security-critical variables are not left at their placeholder defaults
+  ansible.builtin.assert:
+    fail_msg: >-
+      monitoring_ipmi_bmc_superuser_pwd is still set to the 'change-me' placeholder,
+      set a proper password before deploying
+    quiet: true
+    that:
+      - monitoring_ipmi_bmc_superuser_pwd != "change-me"
+
 - name: Create ipmi_exporter directories
   ansible.builtin.file:
     path: "{{ monitoring_ipmi_exporter_etc_host_dir }}"
@@ -20,6 +29,7 @@
     src: config.yml.j2
     dest: "{{ monitoring_ipmi_exporter_etc_host_dir }}/config.yml"
     mode: "0644"
+  diff: false
   notify:
     - Restart ipmi_exporter
 

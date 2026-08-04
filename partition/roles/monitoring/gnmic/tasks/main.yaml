@@ -72,6 +72,7 @@
     src: gnmic.yaml.j2
     dest: "{{ monitoring_gnmic_etc_host_dir }}/gnmic.yaml"
     mode: "0600"
+  diff: false
   notify:
     - Restart gnmic
 

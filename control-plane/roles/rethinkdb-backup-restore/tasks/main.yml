@@ -21,6 +21,15 @@
     that:
       - rethinkdb_backup_restore_sidecar_image_tag is defined
 
+- name: Check that the database password is not left at its placeholder default
+  ansible.builtin.assert:
+    fail_msg: >-
+      rethinkdb_password for {{ rethinkdb_name }} is still set to the 'change-me' placeholder,
+      set a proper password on the calling role (e.g. metal_db_password) before deploying
+    quiet: true
+    that:
+      - rethinkdb_password != "change-me"
+
 - name: Deploy rethinkdb (backup-restore)
   kubernetes.core.k8s:
     definition: "{{ lookup('template', 'rethinkdb.yaml') }}"

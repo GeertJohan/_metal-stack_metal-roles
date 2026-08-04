@@ -12,6 +12,15 @@
       - gardener_metrics_exporter_image_name is defined
       - gardener_metrics_exporter_image_tag is defined
 
+- name: Check that security-critical variables are not left at their placeholder defaults
+  ansible.builtin.assert:
+    fail_msg: >-
+      monitoring_rethinkdb_exporter_metal_db_password is still set to the 'change-me' placeholder,
+      set a proper password before deploying
+    quiet: true
+    that:
+      - monitoring_rethinkdb_exporter_metal_db_password != "change-me"
+
 - name: Check virtual-garden-kubeconfig-refresher cluster_provider is valid
   ansible.builtin.assert:
     fail_msg: >

@@ -14,6 +14,15 @@
       - metal_core_image_tag is defined
       - metal_core_rack_id is not none
 
+- name: Check that security-critical variables are not left at their placeholder defaults
+  ansible.builtin.assert:
+    fail_msg: >-
+      metal_partition_metal_api_hmac_edit_key is still set to the 'change-me' placeholder,
+      set a proper HMAC key before deploying
+    quiet: true
+    that:
+      - metal_partition_metal_api_hmac_edit_key != "change-me"
+
 - name: Create gRPC certs directory
   ansible.builtin.file:
     path: "{{ metal_core_grpc_cert_dir }}"

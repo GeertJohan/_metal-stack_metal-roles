@@ -15,6 +15,15 @@
       - zitadel_init_image_tag is not none
       - zitadel_external_domain is not none
 
+- name: Check that security-critical variables are not left at their placeholder defaults
+  ansible.builtin.assert:
+    fail_msg: >-
+      zitadel_db_password is still set to the 'change-me' placeholder,
+      set a proper password before deploying
+    quiet: true
+    that:
+      - zitadel_db_password != "change-me"
+
 - name: Deploy static users secret
   kubernetes.core.k8s:
     definition:
@@ -26,6 +35,7 @@
       type: Opaque
       stringData:
         config.yaml: "{{ zitadel_init_config | to_json }}"
+  no_log: true
 
 - name: Deploy Zitadel
   kubernetes.core.helm:
@@ -57,6 +67,7 @@
     name: zitadel-client-credentials
     namespace: "{{ zitadel_namespace }}"
   register: secret_info
+  no_log: true
   until: secret_info.resources | length > 0
   retries: 10
   delay: 5

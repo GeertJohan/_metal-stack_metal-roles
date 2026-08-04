@@ -20,6 +20,7 @@
       data: "{{ _gardenlet.backup_infrastructure_secret }}"
     kubeconfig: "{{ virtual_garden_kubeconfig }}"
     apply: true
+  no_log: true
   when: _gardenlet.backup_infrastructure_secret
 
 - name: Deploy Gardenlet

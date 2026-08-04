@@ -14,6 +14,16 @@
       - postgres_backup_restore_sidecar_encryption_key is none or postgres_backup_restore_sidecar_encryption_key | length == 32
       - postgres_backup_restore_sidecar_provider in ["local", "gcp", "s3"]
 
+- name: Check that the database password is not left at its placeholder default
+  ansible.builtin.assert:
+    fail_msg: >-
+      postgres_password for {{ postgres_name }} is still set to the 'change-me' placeholder,
+      set a proper password on the calling role (e.g. ipam_db_password, masterdata_db_password,
+      zitadel_db_password, auditing_timescaledb_password, headscale_db_password) before deploying
+    quiet: true
+    that:
+      - postgres_password != "change-me"
+
 - name: Create namespace
   kubernetes.core.k8s:
     state: present

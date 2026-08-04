@@ -58,6 +58,7 @@
       type: Opaque
       stringData:
         kubeconfig: "{{ monitoring_virtual_garden_kubeconfig_refresher_static_kubeconfig }}"
+  no_log: true
   when:
     - monitoring_gardener_enabled
     - monitoring_virtual_garden_kubeconfig_refresher_cluster_provider == 'static'

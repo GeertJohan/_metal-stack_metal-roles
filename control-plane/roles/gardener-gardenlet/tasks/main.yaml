@@ -14,6 +14,7 @@
 - name: Get kubeconfig for virtual garden access
   virtual_garden_kubeconfig:
     garden_name: "{{ gardener_gardenlet_garden_name }}"
+  no_log: true
 
 - name: Deploy domain secrets (in virtual apiserver)
   kubernetes.core.k8s:
@@ -34,6 +35,7 @@
       data: "{{ gardener_gardenlet_default_dns_credentials }}"
     kubeconfig: "{{ virtual_garden_kubeconfig }}"
     apply: true
+  no_log: true
   loop:
     - internal-domain
     - default-domain

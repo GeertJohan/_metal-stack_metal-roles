@@ -11,7 +11,9 @@
         name: "{{ metal_deployment_token_secret_name }}"
         namespace: "{{ metal_deployment_token_secret_namespace }}"
       register: _token_secret
+      no_log: true
 
     - name: Set deployment token
       ansible.builtin.set_fact:
         metal_deployment_admin_token: "{{ _token_secret.resources[0].data[metal_deployment_token_secret_key] | b64decode }}"
+      no_log: true

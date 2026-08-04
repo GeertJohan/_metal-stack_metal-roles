@@ -14,6 +14,15 @@
       - pixiecore_grpc_client_key is not none
       - pixiecore_api_host is defined
 
+- name: Check that security-critical variables are not left at their placeholder defaults
+  ansible.builtin.assert:
+    fail_msg: >-
+      pixiecore_metal_api_hmac_view_key (metal_partition_metal_api_hmac_view_key) is still set to
+      the 'change-me' placeholder, set a proper HMAC key before deploying
+    quiet: true
+    that:
+      - pixiecore_metal_api_hmac_view_key != "change-me"
+
 - name: Create gRPC certs directory
   ansible.builtin.file:
     path: "{{ pixiecore_grpc_cert_dir }}"

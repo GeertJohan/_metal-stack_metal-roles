@@ -9,6 +9,7 @@
 - name: Get kubeconfig for virtual garden access
   virtual_garden_kubeconfig:
     garden_name: "{{ gardener_managed_seeds_garden_name }}"
+  no_log: true
 
 - name: Loop over managed seeds
   ansible.builtin.include_tasks: managed_seed.yaml

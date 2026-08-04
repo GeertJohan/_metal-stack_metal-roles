@@ -30,6 +30,27 @@
       - not metal_apiserver_enabled or metal_apiserver_oidc_client_id is not none
       - not metal_apiserver_enabled or metal_apiserver_oidc_client_secret is not none
 
+- name: Check that security-critical variables are not left at their placeholder defaults
+  ansible.builtin.assert:
+    fail_msg: >-
+      one or more security-critical variables (metal_api_db_password, metal_api_view_key, metal_api_edit_key,
+      metal_api_admin_key, metal_masterdata_api_db_password, metal_masterdata_api_hmac,
+      metal_tenant_apiserver_db_password, metal_ipam_db_password, metal_api_bmc_superuser_pwd,
+      metal_auditing_timescaledb_password) are still set to the 'change-me' placeholder,
+      set proper secrets before deploying
+    quiet: true
+    that:
+      - metal_api_db_password != "change-me"
+      - metal_api_view_key != "change-me"
+      - metal_api_edit_key != "change-me"
+      - metal_api_admin_key != "change-me"
+      - metal_masterdata_api_db_password != "change-me"
+      - metal_masterdata_api_hmac != "change-me"
+      - metal_tenant_apiserver_db_password != "change-me"
+      - metal_ipam_db_password != "change-me"
+      - not metal_api_bmc_superuser_enabled or metal_api_bmc_superuser_pwd != "change-me"
+      - not metal_auditing_timescaledb_enabled or metal_auditing_timescaledb_password != "change-me"
+
 - name: Deploy metal control plane
   ansible.builtin.include_role:
     name: ansible-common/roles/helm-chart

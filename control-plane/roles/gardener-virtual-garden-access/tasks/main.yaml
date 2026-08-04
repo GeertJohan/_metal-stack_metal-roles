@@ -69,6 +69,7 @@
   virtual_garden_kubeconfig:
     garden_name: "{{ gardener_virtual_garden_access_garden_name }}"
   register: result
+  no_log: true
   until: result is success
   retries: 120
   delay: 5
